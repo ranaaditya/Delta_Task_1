@@ -47,23 +47,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        rand=new Random();                                //INITIALIZING THE RAND VARIABLE ...
-        btn_start=findViewById(R.id.button);
-        btn_guess=findViewById(R.id.button2);
-        editText=findViewById(R.id.trial);
-        editText2=findViewById(R.id.guess);
-        loose=findViewById(R.id.lose);
-        text=findViewById(R.id.textView2);
-        result= findViewById(R.id.resulttext);
-        number=findViewById(R.id.textView);
-        constraintLayout=findViewById(R.id.backr);
-        editText2.setEnabled(false);
-        btn_guess.setEnabled(false);
-
-
-
-        btn_start.setOnClickListener(new View.OnClickListener() {
+        
+            init();
+       btn_start.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 random_age=rand.nextInt(100);                                                  // generating the random number between 1 to 1000.
@@ -82,6 +68,23 @@ public class MainActivity extends AppCompatActivity {
                 start_game(converter);                                                               // starting the game after pressing of START button.
             }
         });
+    }
+    void init(){
+        
+        btn_start=findViewById(R.id.button);
+        btn_guess=findViewById(R.id.button2);
+        editText=findViewById(R.id.trial);
+        editText2=findViewById(R.id.guess);
+        loose=findViewById(R.id.lose);
+        text=findViewById(R.id.textView2);
+        result= findViewById(R.id.resulttext);
+        number=findViewById(R.id.textView);
+        constraintLayout=findViewById(R.id.backr);
+        editText2.setEnabled(false);
+        btn_guess.setEnabled(false);   
+        
+        
+        
     }
 
 
@@ -134,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void start_game(final int trials){
-        number.setText(rand_str);
+        
 
         correct=0;
         wrong=0;
@@ -153,6 +156,10 @@ public class MainActivity extends AppCompatActivity {
         btn_guess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                  if (editText2.getText().toString().equals("")){
+                    Toast.makeText(MainActivity.this,"enter a valid age",Toast.LENGTH_SHORT).show();
+                }
+                else
 
                 if (flag > 1) {
                     guess_str = editText2.getText().toString();
