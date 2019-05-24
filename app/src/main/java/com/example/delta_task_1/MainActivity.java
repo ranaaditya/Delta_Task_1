@@ -1,7 +1,5 @@
 package com.example.delta_task_1;
 
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -10,8 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,28 +19,26 @@ public class MainActivity extends AppCompatActivity {
     public  Button btn_guess;
     public EditText editText;
     public  EditText editText2;
-    public int remwon;
-    public int remlost;
+    public Random rand;
     public  String str;
     public  String guess_str;
     public String rand_str;
     public ConstraintLayout constraintLayout;
     public int cal=0;
-    public int  random_age=50;
-    public int flag=5;
-    public  int guess;
-    public int correct;                                                                //for correct no. of guesses.
-    public  int wrong;                                                                 //for wrong   no. of guesses.
-
-    public SharedPreferences won;
-    public SharedPreferences lost;
+    public  int converter=0;
+    public int  random_age=0;
+    public int flag=0;
+    public  int guess=0;
+    public int correct=0;                                                                //for correct no. of guesses.
+    public  int wrong=0;                                                                 //for wrong   no. of guesses.
 
     public String redcolortable[]={"#990000","#b30000","#cc0000","#e60000","#ff0000"};            // color array containing the codes for various gradients/tints of red color .
-    public String greencolortable[]={"#1B5E20","#009000","00b300","00cc00","00e600"};             // color array containing the codes for various gradients/tints of green color .
+    public String greencolortable[]={"#008000","#009000","00b300","00cc00","00e600"};             // color array containing the codes for various gradients/tints of green color .
 
     // Strings for the results of the guesses made by the  death's daughter.
     public  String lower="lower guess";
     public  String higher="higher";
+    public  String ok="exact";
     public  String maximum=" OOPS!!!  LIMIT EXCEED ,TRY AGAIN";
 
 
@@ -54,42 +48,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-            init();
-            if (won!=null){
-                correct=won.getInt("com.example.delta_task_1.won",0);
-
-            }
-            if (lost!=null){
-                wrong=lost.getInt("com.example.delta_task_1.lost",0);
-
-            }
-        btn_start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rand_str=editText.getText().toString();
-                if (editText.getText().toString().equals("")){
-                    Toast.makeText(MainActivity.this,"type a valid age",Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                else
-                random_age=Integer.parseInt(rand_str);
-                if (random_age>100 || random_age<1){
-                    Toast.makeText(MainActivity.this,"enter a valid age from 1 to 100",Toast.LENGTH_SHORT).show();
-                    editText.setText("");
-                }else{
-                editText.setHint("enter the guess below ");
-
-                str = editText.getText().toString();
-                text.setText("");
-                loose.setText("");
-                result.setText("");
-
-                start_game(flag);  }                                                             // starting the game after pressing of START button.
-            }
-        });
-    }
-
-    void init(){
+        rand=new Random();                                //INITIALIZING THE RAND VARIABLE ...
         btn_start=findViewById(R.id.button);
         btn_guess=findViewById(R.id.button2);
         editText=findViewById(R.id.trial);
@@ -101,84 +60,84 @@ public class MainActivity extends AppCompatActivity {
         constraintLayout=findViewById(R.id.backr);
         editText2.setEnabled(false);
         btn_guess.setEnabled(false);
-        won=getSharedPreferences("com.example.delta_task_1.won",MODE_PRIVATE);
-        lost=getSharedPreferences("com.example.delta_task_1.lost",MODE_PRIVATE);
 
 
 
+        btn_start.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                random_age=rand.nextInt(100);                                                  // generating the random number between 1 to 1000.
+                rand_str=new Integer(random_age).toString();
+                str = editText.getText().toString();
+                text.setText("");
+                loose.setText("");
+                result.setText("");
+
+                try {
+                    converter = Integer.parseInt(str);                                               //parsing the string into the integer.
+                }catch (NumberFormatException e){
+                    e.printStackTrace();
+                }
+
+                start_game(converter);                                                               // starting the game after pressing of START button.
+            }
+        });
     }
+
 
 
             // for changing the app's background colour according to the  accuracy with which guess she  made.
 
     public  void change_background(ConstraintLayout constr,int i){
         if (i==0){
-            constr.setBackgroundColor(Color.parseColor("#1B5E20"));
+            constr.setBackgroundColor(Color.parseColor("#00900"));
 
         }else if (i==1 ||i==-1){
 
-            constr.setBackgroundColor(Color.parseColor("#2E7D32"));
+            constr.setBackgroundColor(Color.parseColor("#00b300"));
         }else if (i==2 || i==-2){
 
-            constr.setBackgroundColor(Color.parseColor("#388E3C"));
+            constr.setBackgroundColor(Color.parseColor("#00CC00"));
 
         }else if (i==3 || i==-3){
 
-            constr.setBackgroundColor(Color.parseColor("#43A047"));
+            constr.setBackgroundColor(Color.parseColor("#00e600"));
 
         }else if (i==4||i==-4){
 
-            constr.setBackgroundColor(Color.parseColor("#4CAF50"));
+            constr.setBackgroundColor(Color.parseColor("#00ff00"));
 
         }else if (i==5||i==-5){
 
-            constr.setBackgroundColor(Color.parseColor("#66BB6A"));
+            constr.setBackgroundColor(Color.parseColor("#ff4d4d"));
 
         }else if (i==6||i==-6){
 
-            constr.setBackgroundColor(Color.parseColor("#81C784"));
+            constr.setBackgroundColor(Color.parseColor("#ff3333"));
 
         }else if (i==7||i==-7){
-            constr.setBackgroundColor(Color.parseColor("#A5D6A7"));
+            constr.setBackgroundColor(Color.parseColor("#ff1a1a"));
 
         }else if (i==8||i==-8){
-            constr.setBackgroundColor(Color.parseColor("#C8E6C9"));
+            constr.setBackgroundColor(Color.parseColor("#ff0000"));
 
         }else if (i==9||i==-9){
-            constr.setBackgroundColor(Color.parseColor("#EF9A9A"));
-
-        }else if (i==10||i==-10){
-            constr.setBackgroundColor(Color.parseColor("#E57373"));
-
-        }else if (i==11||i==-11){
-            constr.setBackgroundColor(Color.parseColor("#EF5350"));
-
-        }else if (i==12||i==-12){
-            constr.setBackgroundColor(Color.parseColor("#F44336"));
-
-        }else if (i==13||i==-13){
-            constr.setBackgroundColor(Color.parseColor("#E53935"));
-
-        }else if (i==14||i==-14){
-            constr.setBackgroundColor(Color.parseColor("#D32F2F"));
-
-        }else if (i==15||i==-15){
-            constr.setBackgroundColor(Color.parseColor("#C62828"));
-
-        }else if (i==16||i==-16){
-            constr.setBackgroundColor(Color.parseColor("#B71C1C"));
+            constr.setBackgroundColor(Color.parseColor("#cc0000"));
 
         }else{
-            constr.setBackgroundColor(Color.parseColor("#B71C1C"));
+            constr.setBackgroundColor(Color.parseColor("#cc0000"));
+
         }
+
     }
 
 
 
     public void start_game(final int trials){
-        editText.setText("");
+        number.setText(rand_str);
 
-
+        correct=0;
+        wrong=0;
         flag=trials;
 
 
@@ -194,27 +153,14 @@ public class MainActivity extends AppCompatActivity {
         btn_guess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                guess_str = editText2.getText().toString();
-                try {
-                    guess = Integer.parseInt(guess_str);                        //converting the string into integer .
-                } catch (NumberFormatException e) {
-                    e.printStackTrace();
-                }
 
-                if (guess>100 || guess<1){
-                    Toast.makeText(MainActivity.this,"type a valid age",Toast.LENGTH_SHORT).show();
-                    editText2.setText("");
-                }
-
-                if (editText2.getText().toString().equals("")){
-                    Toast.makeText(MainActivity.this,"enter a valid age",Toast.LENGTH_SHORT).show();
-                }
-                else
-
-                if (flag>=1) {
-
-
-
+                if (flag > 1) {
+                    guess_str = editText2.getText().toString();
+                    try {
+                        guess = Integer.parseInt(guess_str);                        //converting the string into integer .
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
+                    }
 
                     cal = Math.abs(guess - random_age);                            //for converting the difference into positive integer.
 
@@ -222,19 +168,8 @@ public class MainActivity extends AppCompatActivity {
                     if (guess == random_age) {
 
                         correct = correct + 1;
-                        SharedPreferences.Editor editor2=won.edit();
-                        editor2.putInt("com.example.delta_task_1.won",correct);
-                        editor2.commit();
-                        remwon=won.getInt("com.example.delta_task_1.won",0);
-                        remlost=lost.getInt("com.example.delta_task_1.lost",0);
-                        Toast.makeText(MainActivity.this,"exact guess",Toast.LENGTH_SHORT).show();
-                        loose.setText("!!!win!!!");
-                        btn_guess.setEnabled(false);
-                        btn_start.setEnabled(true);
-                        editText.setEnabled(true);
-                        editText2.setEnabled(false);
-                        text.setText("TEST WON-"+remwon+"     "+"TEST LOST -"+remlost);
-                        flag =5;
+                        result.setText(ok);
+                        flag = flag - 1;
                         editText2.setText("");
                         constraintLayout.setBackgroundColor(Color.parseColor(greencolortable[0]));
 
@@ -242,6 +177,7 @@ public class MainActivity extends AppCompatActivity {
                     } else if (guess < random_age) {
                         change_background(constraintLayout, cal);
 
+                        wrong = wrong + 1;
                         result.setText(lower);
                         flag = flag - 1;
                         editText2.setText("");
@@ -249,6 +185,8 @@ public class MainActivity extends AppCompatActivity {
 
                     } else if (guess>random_age){
 
+
+                        wrong = wrong + 1;
                         result.setText(higher);
                         flag = flag - 1;
                         editText2.setText("");
@@ -258,26 +196,20 @@ public class MainActivity extends AppCompatActivity {
                 }
 
              else{
-
-                 wrong=wrong+1;
-                 SharedPreferences.Editor editor=lost.edit();
-                 editor.putInt("com.example.delta_task_1.lost",wrong);
-                 editor.commit();
-                    loose.setText(" LOST  ");
                     constraintLayout.setBackgroundColor(Color.parseColor("#4d4d4d"));
-                    remwon=won.getInt("com.example.delta_task_1.won",0);
-                    remlost=lost.getInt("com.example.delta_task_1.lost",0);
-                    text.setText("TEST WON-"+remwon+"     "+"TEST LOST -"+remlost);
-                    wrong=remlost;
-                    correct=remwon;
-                    result.setTextSize(28);
+                    if (correct!=trials)
+                    text.setText("win - " + correct + "  " + "loose - " + wrong);
+                    if (correct==trials){
+                        text.setEnabled(false);
+                        loose.setText(" !!! oops Better luck next time  !!! ");
+                    }else loose.setText(" LOST  ");
+                    result.setTextSize(15);
+                    number.setText("");
                     result.setText(maximum);
-                    flag=5;
                     editText.setEnabled(true);
                     btn_start.setEnabled(true);
                     editText2.setEnabled(false);
                     btn_guess.setEnabled(false);
-                    editText.setHint("Age to be guessed");
                     editText.setText("");
                     editText2.setText("");
 
